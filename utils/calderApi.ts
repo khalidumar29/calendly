@@ -1,4 +1,4 @@
-interface FreeSlot {
+export interface FreeSlot {
   start: string;
   end: string;
 }

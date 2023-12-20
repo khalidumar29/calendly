@@ -1,4 +1,3 @@
-import { access } from "fs";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -39,7 +38,7 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
         token.accessToken = user.accessToken;
         token.refresh_token = user.refresh_token;

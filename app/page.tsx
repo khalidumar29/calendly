@@ -1,9 +1,16 @@
 "use client";
-import { calculateFreeSlots } from "@/utils/calderApi";
-import axios, { AxiosRequestConfig } from "axios";
+import { FreeSlot, calculateFreeSlots } from "@/utils/calderApi";
+import axios from "axios";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+
+type User = {
+  name?: string | null | undefined;
+  email?: string | null | undefined;
+  image?: string | null | undefined;
+  accessToken?: string | null | undefined;
+};
 
 const getCalendarAvailability = async (accessToken: string) => {
   try {
@@ -38,14 +45,17 @@ const getCalendarAvailability = async (accessToken: string) => {
 export default function Home() {
   const { data: session } = useSession();
   const [freeSlots, setFreeSlots] = useState<Array<FreeSlot>>([]);
-  const [busySlots, setBusySlots] = useState<Array<any>>([]);
+  const [busySlots, setBusySlots] = useState<Array<FreeSlot>>([]);
 
   useEffect(() => {
     if (session) {
-      getCalendarAvailability(session.user.accessToken).then((slots) => {
-        setFreeSlots(slots.freeSlots);
-        setBusySlots(slots.busySlots);
-      });
+      const user = session?.user as User;
+      if (user.accessToken) {
+        getCalendarAvailability(user.accessToken).then((slots) => {
+          setFreeSlots(slots.freeSlots);
+          setBusySlots(slots.busySlots);
+        });
+      }
     }
   }, [session]);
 

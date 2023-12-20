@@ -5,7 +5,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export const getCalendarAvailability = async (accessToken: string) => {
+const getCalendarAvailability = async (accessToken: string) => {
   try {
     const response = await axios.post(
       "https://www.googleapis.com/calendar/v3/freeBusy",
